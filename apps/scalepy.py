@@ -39,7 +39,7 @@ defaultFig.update_layout(showlegend=False, template=None, plot_bgcolor = "#F0F2F
 inputCol, graphCol = st.columns([1, 2.7])
 
 with inputCol:
-    st.markdown("## ScalePy")
+    st.markdown("# 🚀ScalePy")
     responseTab, selectionTab, scalingTab = st.tabs(["Response Spectrum", "Record Filtering", "Scaling"])
     with responseTab:
         responseDefinitionType = st.selectbox("Spectrum Definition", ['TBEC-2018', 'ASCE7-22', 'User-Defined'])
@@ -66,6 +66,7 @@ with inputCol:
             st.download_button("Example CSV file", data=exampleCSV, file_name='exampleSpectrum.csv', mime='text/csv')
             with st.form("userDefinedForm"):
                 userDefinedSpectrum = st.file_uploader('Upload Response Spectrum Data', type='csv', accept_multiple_files=False)
+                st.set_option('deprecation.showfileUploaderEncoding', False)
                 userDefinedSpectrumButton = st.form_submit_button('Create Response Spectrum')
 
     with selectionTab:

@@ -6,7 +6,7 @@ from functions.eqDataProcess.tbecTargetCreator import tbecTargetSpectrum
 from functions.eqDataProcess.ariasCreator import ariasIntensityCreator
 
 # set the title of the page and layout
-st.title("Earthquake Data Processor")
+st.markdown("# 🌐Earthquake Data Processor")
 firstCol, secondCol = st.columns(2)
 
 # create file uploader
