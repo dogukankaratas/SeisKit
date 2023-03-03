@@ -7,11 +7,26 @@ from functions.eqDataProcess.ariasCreator import ariasIntensityCreator
 
 # set the title of the page and layout
 st.markdown("# 🌐Earthquake Data Processor")
-firstCol, secondCol = st.columns(2)
 
 # create file uploader
-with firstCol:
-    uploadedFile = st.file_uploader("Upload File", ['asc'])
+uploadedFile = st.file_uploader("Upload File", ['asc'])
+
+# create columns for layout
+firstCol, secondCol = st.columns(2)
+
+# create default figure for raw acceleration visualization
+accFig = go.Figure()
+accFig.update_xaxes(
+    title_text = 'Time (s)',
+    showgrid = True,
+    showline = False)
+
+accFig.update_yaxes(
+    title_text = 'Acceleration (g)',
+    showgrid = True,
+    showline = False)
+
+accFig.update_layout(title = 'Raw Acceleration Data', title_x=0.4, plot_bgcolor = "#F0F2F6")
 
 # create default figure for filtered acceleration visualization
 filteredAccFig = go.Figure()
@@ -25,7 +40,7 @@ filteredAccFig.update_yaxes(
     showgrid = True,
     showline = False)
 
-filteredAccFig.update_layout(title = 'Processed Acceleration Data', title_x=0.4)
+filteredAccFig.update_layout(title = 'Processed Acceleration Data', title_x=0.4, plot_bgcolor = "#F0F2F6")
 
 # create default figure for response spectrum visualization
 responseFig = go.Figure()
@@ -43,6 +58,7 @@ responseFig.update_yaxes(
                     )
 
 responseFig.update_layout(showlegend=True, 
+                          plot_bgcolor = "#F0F2F6",
                           title = 'Response Spectrum', title_x=0.4,
                           legend = dict(
                             yanchor="top",
@@ -64,6 +80,7 @@ ariasFig.update_yaxes(
 )    
 
 ariasFig.update_layout(showlegend = True,
+                       plot_bgcolor = "#F0F2F6",
                        title = 'Arias Intensity', title_x = 0.4,
                        legend = dict(
                             yanchor="top",
@@ -84,6 +101,8 @@ if uploadedFile:
     else:
         orientation = 'vertical'
 
+    
+
     # create the response spectrum from uploaded file
     returnedDict = asciiReader(rawFile)
     responseTime, responseAcc = ResponseSpectra(returnedDict['filteredAccList'], returnedDict['sampling'])
@@ -94,6 +113,13 @@ if uploadedFile:
 
     # create arias intesity values
     ariasValues = ariasIntensityCreator(returnedDict['filteredAccList'], returnedDict['sampling'])
+
+    # push raw acceleration to the graphic
+    accFig.add_trace(go.Scatter(
+        x = returnedDict['accTime'],
+        y = returnedDict['rawAccList'],
+        line=dict(color='gray')
+    ))
 
     # push filtered acceleration to the graphic
     filteredAccFig.add_trace(go.Scatter(
@@ -151,7 +177,8 @@ if uploadedFile:
     )
 
 with firstCol:
-    st.plotly_chart(responseFig)
+    st.plotly_chart(accFig, use_container_width=True)
+    st.plotly_chart(responseFig, use_container_width=True)
 with secondCol:
-    st.plotly_chart(filteredAccFig)
-    st.plotly_chart(ariasFig)
+    st.plotly_chart(filteredAccFig, use_container_width=True)
+    st.plotly_chart(ariasFig, use_container_width=True)

@@ -10,6 +10,8 @@ sys.path.append(dirName + r'./')
 from functions.scalepy import scalepyBack
 from functions.scalepy import accesAsce
 
+st.markdown("# 🚀ScalePy")
+
 # default empty figure
 defaultFig = go.Figure()
 defaultFig.update_xaxes(
@@ -38,8 +40,8 @@ defaultFig.update_layout(showlegend=False, template=None, plot_bgcolor = "#F0F2F
     
 inputCol, graphCol = st.columns([1, 2.7])
 
+
 with inputCol:
-    st.markdown("# 🚀ScalePy")
     responseTab, selectionTab, scalingTab = st.tabs(["Response Spectrum", "Record Filtering", "Scaling"])
     with responseTab:
         responseDefinitionType = st.selectbox("Spectrum Definition", ['TBEC-2018', 'ASCE7-22', 'User-Defined'])
@@ -704,7 +706,7 @@ if scaleButton:
               fillcolor="yellow", opacity=0.1, line_width=0)
 
 with graphCol:
-    st.plotly_chart(defaultFig)
+    st.plotly_chart(defaultFig, use_container_width=True)
 
 if selectButton:
     defaultFrame = pd.DataFrame(columns=["Record Sequence Number", "Earthquake Name", "Station Name", "Scale Factor"], index=pd.RangeIndex(start=1, stop = numberRecords + 1, name='index'))
