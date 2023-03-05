@@ -42,7 +42,7 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🌐Earthquake Data Processor</h5>
                 <p class="card-text">Process and visualize your raw earthquake data.</p>
-                <a href="http://localhost:8501/ScalePy" class="btn btn-outline-primary" >Go To App</a>
+                <a href="http://localhost:8501/Earthquake%20Data%20Processor" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
@@ -53,7 +53,7 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🔸TBEC-2018 Response Spectrum Creator</h5>
                 <p class="card-text">Create response spectrums based on selected location acc. to TBEC-2018.</p>
-                <a href="http://localhost:8501/ScalePy" class="btn btn-outline-primary" >Go To App</a>
+                <a href="http://localhost:8501/TBEC-2018%20Response%20Spectrum" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
@@ -64,7 +64,7 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🔹ASCE7-22 Response Spectrum Creator</h5>
                 <p class="card-text">Create response spectrums based on selected location acc. to ASCE7-22.</p>
-                <a href="http://localhost:8501/ScalePy" class="btn btn-outline-primary" >Go To App</a>
+                <a href="http://localhost:8501/ASCE7-22%20Response%20Spectrum" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
