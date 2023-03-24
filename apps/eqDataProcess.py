@@ -4,9 +4,11 @@ from functions.eqDataProcess.asciiProcessor import asciiReader
 from functions.eqDataProcess.responseCreator import ResponseSpectra
 from functions.eqDataProcess.tbecTargetCreator import tbecTargetSpectrum
 from functions.eqDataProcess.ariasCreator import ariasIntensityCreator
+from injections import add_logo
 
 # set the title of the page and layout
 st.markdown("# 🌐Earthquake Data Processor")
+add_logo()
 
 # create file uploader
 uploadedFile = st.file_uploader("Upload File", ['asc'])

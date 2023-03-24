@@ -5,9 +5,11 @@ import math
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 from functions.asceResponse.accessAsce import getAsceDataMulti, getAsceDataMultiMCEr, getAsceDataTwo, getAsceDataTwoMCEr
+from injections import add_logo
 
 # set title
 st.markdown("# 🔹ASCE7-22 Response Spectrum Creator")
+add_logo()
 
 # create a function for get position from map
 def get_pos(lat,lng):

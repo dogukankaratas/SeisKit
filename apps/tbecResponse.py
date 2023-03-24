@@ -5,9 +5,11 @@ import pandas as pd
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 from functions.tbecResponse.tbecResponseSpectrum import tbecTargetSpectrum
+from injections import add_logo
 
-# set title
+# set title and logo
 st.markdown("# 🔸TBEC-2018 Response Spectrum Creator")
+add_logo()
 
 # create a function for get position from map
 def get_pos(lat,lng):

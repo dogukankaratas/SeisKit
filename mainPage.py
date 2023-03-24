@@ -1,9 +1,10 @@
 import streamlit as st
-from st_pages import show_pages, Page, Section, add_page_title
+from st_pages import show_pages, Page
+from injections import add_logo
 
+# set page config and logo
 st.set_page_config(layout="wide", page_icon="🪁")
-
-# add_page_title()
+add_logo()
 
 show_pages(
     [
@@ -20,9 +21,9 @@ show_pages(
     ]
 )
 
-st.title("Welcome to SeisKit 👋")
+st.title("Welcome to openseiskit 👋")
 
-st.markdown("SeisKit is an open-source project which aims to create free and accesible applications for earthquake engineering.")
+st.markdown("Openseiskit is an open-source project which aims to create free and accesible applications for earthquake engineering.")
 st.markdown("## Applications")
 st.markdown("""
     <div class="card-deck">
