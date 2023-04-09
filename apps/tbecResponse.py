@@ -6,6 +6,8 @@ from streamlit_folium import st_folium
 import plotly.graph_objects as go
 from functions.tbecResponse.tbecResponseSpectrum import tbecTargetSpectrum
 from injections import add_logo
+from PIL import Image
+import io, base64
 
 # set title and logo
 st.markdown("# 🔸TBEC-2018 Response Spectrum Creator")
@@ -18,6 +20,24 @@ def get_pos(lat,lng):
 # create folium map and zoom in turkey
 m = fl.Map(location=[39, 48], zoom_start=5)
 m.add_child(fl.LatLngPopup())
+
+# add contour
+img = Image.open('.streamlit/assets/afadContour.png')
+b = io.BytesIO()
+img.save(b, format='PNG')
+b64 = base64.b64encode(b.getvalue())
+fl.raster_layers.ImageOverlay(
+        image=f'data:image/png;base64,{ b64.decode("utf-8") }',
+        bounds=[[35.65, 24.45], [42.65, 45.15]],
+        opacity=0.5,
+        interactive=False,
+        cross_origin=False,
+        zindex=1
+    ).add_to(m)
+
+fl.LayerControl().add_to(m)
+
+# render map
 map = st_folium(m, height=250, width=1500, center=[39, 48], zoom=5)
 
 # get location data from click event
