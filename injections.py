@@ -1,26 +1,35 @@
 import streamlit as st
 
-def add_logo():
+def addLogo():
     st.markdown(
         """
         <style>
-            [data-testid="stSidebarNav"] {
-                background-image: url(https://i.ibb.co/Hgyhdvf/logo2.png);
-                background-repeat: no-repeat;
-                padding-top: 35px;
-                background-position: 100px 20px;
-            }
             [data-testid="stSidebarNav"]::before {
-                content: "openseiskit";
-                margin-left: 100px;
+                content: "SeisKit";
+                margin-left: 120px;
                 margin-top: 10px;
-                font-size: 18px;
+                font-size: 20px;
                 font-family: "Verdana";
                 color: #2F86B1;
-                position: relative;
-                top: 80px;
+                position: absolute;
+                top: 30px;
             }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+def addBootstrap():
+    st.markdown("""
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    """, unsafe_allow_html = True)
+
+def zeroPadding():
+    hide_streamlit_style = """
+    <style>
+        #root > div:nth-child(1) > div > div > div > div > section > div {padding-top: 0rem;}
+    </style>
+
+    """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)

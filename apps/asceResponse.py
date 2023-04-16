@@ -1,24 +1,22 @@
 import streamlit as st
 import folium as fl
-import pandas as pd
-import math
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 from functions.asceResponse.accessAsce import getAsceDataMulti, getAsceDataMultiMCEr, getAsceDataTwo, getAsceDataTwoMCEr
-from injections import add_logo
+from injections import addLogo
 
 # set title
 st.markdown("# 🔹ASCE7-22 Response Spectrum Creator")
-add_logo()
+addLogo()
 
 # create a function for get position from map
 def get_pos(lat,lng):
     return lat,lng
 
 # create folium map and zoom in usa
-m = fl.Map(location=[40, -55], zoom_start=3.5)
+m = fl.Map(location=[40, -55], zoom_start=3)
 m.add_child(fl.LatLngPopup())
-map = st_folium(m, height=250, width=1500, center=[40, -55], zoom=3.5)
+map = st_folium(m, height=250, width=1500, center=[40, -55], zoom=3)
 
 # get location data from click event
 locationData = [37.0, -81.0]

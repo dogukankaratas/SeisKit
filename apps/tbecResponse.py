@@ -5,13 +5,12 @@ import pandas as pd
 from streamlit_folium import st_folium
 import plotly.graph_objects as go
 from functions.tbecResponse.tbecResponseSpectrum import tbecTargetSpectrum
-from injections import add_logo
+from injections import addLogo
 from PIL import Image
 import io, base64
 
 # set title and logo
 st.markdown("# 🔸TBEC-2018 Response Spectrum Creator")
-add_logo()
 
 # create a function for get position from map
 def get_pos(lat,lng):
@@ -38,7 +37,7 @@ fl.raster_layers.ImageOverlay(
 fl.LayerControl().add_to(m)
 
 # render map
-map = st_folium(m, height=250, width=1500, center=[39, 48], zoom=5)
+map = st_folium(m, height=250, width=1500, center=[39, 46], zoom=5)
 
 # get location data from click event
 locationData = [36.0, 42.0]

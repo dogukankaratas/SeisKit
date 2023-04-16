@@ -1,6 +1,6 @@
 from functions.scalepy import accesAsce
 from functions.scalepy import scalepyBack
-from injections import add_logo
+from injections import addLogo
 import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
@@ -13,7 +13,7 @@ sys.path.append(dirName + r'./')
 
 # add title and logo
 st.markdown("# 🚀Selection and Scaling Tool")
-add_logo()
+addLogo()
 
 # default empty figure
 defaultFig = go.Figure()

@@ -1,10 +1,13 @@
 import streamlit as st
 from st_pages import show_pages, Page
-from injections import add_logo
+from injections import addLogo, addBootstrap, zeroPadding
 
 # set page config and logo
 st.set_page_config(layout="wide", page_icon="🪁")
-add_logo()
+# add injections
+addLogo()
+addBootstrap()
+zeroPadding()
 
 show_pages(
     [
@@ -21,18 +24,17 @@ show_pages(
     ]
 )
 
-st.title("Welcome to openseiskit 👋")
+st.title("Welcome to SeisKit 👋")
 
-st.markdown("Openseiskit is an open-source project which aims to create free and accesible applications for earthquake engineering.")
+st.markdown("SeisKit is an open-source project which aims to create free and accesible applications for earthquake engineering.")
 st.markdown("## Applications")
 st.markdown("""
     <div class="card-deck">
         <div class="card">
             <img class="card-img-top" src="https://i.ibb.co/XCNVKXG/scalePy.png" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">🚀ScalePy</h5>
+            <div class="card-body ">
+                <h5 class="card-title justify-content-center">🚀ScalePy</h5>
                 <p class="card-text">Ground Motion Selection and Scaling Tool</p>
-                <a href="http://localhost:8501/ScalePy" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 25/02/2023</small>
@@ -43,7 +45,6 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🌐Earthquake Data Processor</h5>
                 <p class="card-text">Process and visualize your raw earthquake data.</p>
-                <a href="http://localhost:8501/Earthquake%20Data%20Processor" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
@@ -54,7 +55,6 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🔸TBEC-2018 Response Spectrum Creator</h5>
                 <p class="card-text">Create response spectrums based on selected location acc. to TBEC-2018.</p>
-                <a href="http://localhost:8501/TBEC-2018%20Response%20Spectrum" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
@@ -65,7 +65,6 @@ st.markdown("""
             <div class="card-body">
                 <h5 class="card-title">🔹ASCE7-22 Response Spectrum Creator</h5>
                 <p class="card-text">Create response spectrums based on selected location acc. to ASCE7-22.</p>
-                <a href="http://localhost:8501/ASCE7-22%20Response%20Spectrum" class="btn btn-outline-primary" >Go To App</a>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Updated at 01/03/2023</small>
@@ -73,9 +72,3 @@ st.markdown("""
         </div>
     </div>
 """, unsafe_allow_html = True)
-
-st.markdown("""
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-""", unsafe_allow_html = True)
-
