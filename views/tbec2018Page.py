@@ -67,14 +67,11 @@ def load_view():
                             showline = True
                         )
 
-    horizotanlResponseFig.update_layout(showlegend=True, 
+    horizotanlResponseFig.update_layout(showlegend=False, 
                             plot_bgcolor = "#F0F2F6",
                             title = 'TBEC-2018 Horizontal Response Spectrum', title_x=0.4,
-                            height = 500,
-                            legend = dict(
-                                yanchor="top",
-                                xanchor="right"
-                            ))
+                            height = 500
+                            )
 
     # create default figure for vertical spectrum figure
     verticalResponseFig = go.Figure()
@@ -91,14 +88,11 @@ def load_view():
                             showline = True
                         )
 
-    verticalResponseFig.update_layout(showlegend=True, 
+    verticalResponseFig.update_layout(showlegend=False, 
                             plot_bgcolor = "#F0F2F6",
                             title = 'TBEC-2018 Vertical Response Spectrum', title_x=0.4,
-                            height = 500,
-                            legend = dict(
-                                yanchor="top",
-                                xanchor="right"
-                            ))
+                            height = 500
+                            )
 
     # create default table
     spectralTable = pd.DataFrame()
