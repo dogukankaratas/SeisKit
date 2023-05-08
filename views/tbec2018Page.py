@@ -27,7 +27,7 @@ def load_view():
     m.add_child(fl.LatLngPopup())
 
     # add contour
-    img = Image.open(r'style\assets\afadContour.png')
+    img = Image.open('style/assets/afadContour.png')
     b = io.BytesIO()
     img.save(b, format='PNG')
     b64 = base64.b64encode(b.getvalue())
