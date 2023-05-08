@@ -30,7 +30,7 @@ def load_view():
                         <p class="lead"> For free.</p>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                             <a href="https://github.com/dogukankaratas/SeisKit" class="btn btn-outline-primary btn-sm px-4 me-md-2" role="button" aria-pressed="true">Source Code</a>
-                            <a href="" class="btn btn-outline-primary btn-sm px-4 me-md-2" role="button" aria-pressed="true">Join Slack</a>
+                            <a href="https://join.slack.com/t/seiskit/shared_invite/zt-1upceiiyt-0DudtX~xTlXWwngFMbc1YA" class="btn btn-outline-primary btn-sm px-4 me-md-2" role="button" aria-pressed="true">Join Slack</a>
                         </div>
                     </div>
                 </div>
