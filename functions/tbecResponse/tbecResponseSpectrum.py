@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 import math
 import pandas as pd
 import numpy as np
@@ -38,6 +38,7 @@ class SeismicInputs:
     lon       : float= field(default_factory=float)
     soil      : str= field(default_factory=str)
     intensity : str= field(default_factory=str)
+    DTS       : int = field(default=1)
     R         : float = field(default=8.)
     D         : float = field(default=3.)
     I         : float = field(default=1.)
@@ -56,6 +57,15 @@ class SeismicInputs:
     def __repr__(self) -> str:
         return f"Latitude :{self.lat}\nLongitude :{self.lon}\nSoil Class :{self.soil}\nIntensity:{self.intensity}\nR :{self.R}\nD :{self.D}\nI :{self.I}\nSs :{self.Ss}\nS1 :{self.S1}\nPGA :{self.PGA}\nPGV :{self.PGV}\nFs :{self.Fs}\nF1 :{self.F1 }\nSDs :{self.SDs}\nSD1 :{self.SD1}\nTA :{self.TA}\nTB :{self.TB}\nTL :{self.TL}"
 
+    def dict(self) -> dict:
+        return asdict(self)
+    
+    def convert_dataframe(self) -> pd.DataFrame:
+        dumy = self.dict()
+        dumy_df = pd.DataFrame([dumy])
+        del dumy
+        return dumy_df
+
 
 @dataclass
 class SeismicTSC:
@@ -63,17 +73,17 @@ class SeismicTSC:
 
 
     def __post_init__(self) -> None:
-        self.GetSpectralMapCoefficient()
-        self.GetDTS()
-        self.Get_TA()
-        self.Get_TB()
-        self.ElasticHorizontalSpectrum = self.HorizontalElasticSpectrum()
-        self.HorizontalDisplacementSpectrum()
-        self.VerticalElasticSpektrum()
-        self.ReducedTargetSpectrum()
+        self.__GetSpectralMapCoefficient()
+        self.__GetDTS()
+        self.__Get_TA()
+        self.__Get_TB()
+        self.ElasticHorizontalSpectrum = self.__HorizontalElasticSpectrum()
+        self.__HorizontalDisplacementSpectrum()
+        self.__VerticalElasticSpektrum()
+        self.__ReducedTargetSpectrum()
         
 
-    def GetSpectralMapCoefficient(self):
+    def __GetSpectralMapCoefficient(self) -> None:
         """Spektrum haritasinda verilen koordinatlara göre spektral harita değerlerini bulur"""
         afad_spectra_params_df = pd.read_csv("data/eqDataProcess/AFAD_TDTH_parametre.csv")   
 
@@ -144,7 +154,10 @@ class SeismicTSC:
         
         del Ss_range,FS_table,S1_range,F1_table
 
-    def GetDTS(self) -> None:
+    def __GetDTS(self) -> None:
+        """
+        Get building seismic design classification
+        """
         if self.Variables.SDs < .33 : 
             self.Variables.DTS = 4
         elif self.Variables.SDs >= 0.33 and self.Variables.SDs < 0.50 : 
@@ -155,21 +168,17 @@ class SeismicTSC:
             self.Variables.DTS = 1
         pass
 
-    def Get_TA(self) -> float:
+    def __Get_TA(self) -> float:
         """Yatay elastik tasarim spektrum sol köşe periyodu"""
         self.Variables.TA = 0.2 * self.Variables.SD1 / self.Variables.SDs
     
-    def Get_TB(self) -> float:
+    def __Get_TB(self) -> float:
         """Yatay elastik tasarim elastik spektrum sağ köşe periyodu"""
         self.Variables.TB = self.Variables.SD1 / self.Variables.SDs
     
-    def HorizontalElasticSpectrum(self)-> pd.DataFrame:
+    def __HorizontalElasticSpectrum(self)-> pd.DataFrame:
         """TBDY yatay elastik tasarim spektrumu"""
 
-        # TA = 0.2 * self.SeismicVariables.SD1 / self.SeismicVariables.SDs
-        # TB = self.SeismicVariables.SD1 / self.SeismicVariables.SDs
-        
-        
         T_list = np.arange(0.0, self.Variables.TL,.005)
             
         Sa = []
@@ -195,12 +204,12 @@ class SeismicTSC:
         
         return target_spec_df
 
-    def HorizontalDisplacementSpectrum(self) -> None:
+    def __HorizontalDisplacementSpectrum(self) -> None:
         """Tbdy elastik tasarim deplasman spektrumunun hesabi"""
         Sde = [(T**2/4*3.14**2)*9.81*Sae for T,Sae in zip(self.ElasticHorizontalSpectrum["T"],self.ElasticHorizontalSpectrum["Sae"])]
         self.ElasticHorizontalSpectrum["Sde"] = Sde
 
-    def VerticalElasticSpektrum(self) -> None:
+    def __VerticalElasticSpektrum(self) -> None:
         """Dusey elastik dizayn spektrumu"""
         TAD , TBD , TLD = self.Variables.TA / 3 , self.Variables.TB / 3 , self.Variables.TL / 2
         Sve = []
@@ -221,7 +230,7 @@ class SeismicTSC:
 
         del Sve
    
-    def Get_Ra(self,T : float) -> float:
+    def __Get_Ra(self,T : float) -> float:
         """Verilen doğal titreşim periyoduna göre deprem yükü azaltma katsayisini hesaplar"""
         if T > self.Variables.TB:
             Ra = self.Variables.R / self.Variables.I
@@ -229,16 +238,16 @@ class SeismicTSC:
             Ra = self.Variables.D + ((self.Variables.R/self.Variables.I)-self.Variables.D)*(T/self.Variables.TB)
         return Ra
 
-    def ReducedTargetSpectrum(self) -> None:
+    def __ReducedTargetSpectrum(self) -> None:
         """Azaltilmis elastik tasarim spektrumu"""
         Tw = self.ElasticHorizontalSpectrum["T"]
-        RaT = [ self.Get_Ra(T) for T in Tw ]
+        RaT = [ self.__Get_Ra(T) for T in Tw ]
         SaR = [(Sa/Ra) for Sa,Ra in zip(self.ElasticHorizontalSpectrum["Sae"],RaT)]
         self.ElasticHorizontalSpectrum["RaT"] = RaT
         self.ElasticHorizontalSpectrum["SaR"] = SaR
         del SaR,RaT,Tw
    
-    def Get_Sae_Tp(self,T : float) -> float:
+    def __Get_Sae_Tp(self,T : float) -> float:
         """ Binanin doğal titreşim periyoduna denk gelen elastik spektrum değerini bulur. """
 
         if T < self.Variables.TA:
@@ -257,8 +266,8 @@ class SeismicTSC:
     
     def Get_SaR_Tp(self,T : float) -> float:
         """Verilen periyoda göre azaltilmiş elastik tasarim spektrum ivmesini hesaplar"""
-        Ra = self.Get_Ra(T)
-        Sae = self.GetSpectralAcceleration(T)
+        Ra = self.__Get_Ra(T)
+        Sae = self.__Get_Sae_Tp(T)
         return round(Sae / Ra,4)        
 
     # def plot_HorizontalElasticSpectrum(self) -> None:
@@ -277,16 +286,13 @@ class SeismicTSC:
     #     plt.show()
 
 
-#Test
 # if __name__ == "__main__":
 #     ss = SeismicInputs(35.1,lon=35.2,soil='ZB',intensity='DD2')
 #     target = SeismicTSC(Variables= ss)
 
-#     print(target.ElasticHorizontalSpectrum)
+#     print(target.Variables.asdict())
 
-#     plt.plot(target.ElasticHorizontalSpectrum['T'],target.ElasticHorizontalSpectrum['Sve'])
-#     plt.show()
-#     # target.plot_HorizontalElasticSpectrum()
+    # target.plot_HorizontalElasticSpectrum()
 
 
 
