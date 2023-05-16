@@ -11,7 +11,7 @@ import sys
 baseName = os.path.basename(__file__)
 dirName = os.path.dirname(__file__)
 sys.path.append(dirName + r'./')
-from functions.tbecResponse.tbecResponseSpectrum import tbecTargetSpectrum
+from functions.tbecResponse.tbecResponseSpectrum import SeismicTSC,SeismicInputs
 
 def load_view():
 
@@ -94,13 +94,6 @@ def load_view():
                             height = 500
                             )
 
-    # create default table
-    spectralTable = pd.DataFrame()
-    spectralTable['Spectral Parameters'] = ['SS', 'S1', 'PGA', 'PGV', 'Fs', 'F1', 
-                                            'SDs', 'SD1', 'TA', 'TB', 'TL', 'DTS']
-
-    spectralTable['Values'] = ['No Value'] * 12
-
     # create two columns for layout
     inputCol, graphCol = st.columns([1,2])
 
@@ -113,59 +106,49 @@ def load_view():
             soil = st.selectbox("Soil Type", ('ZA', 'ZB', 'ZC', 'ZD', 'ZE'), 2)
             intensityLevel = st.selectbox("Intensity Level", ["DD1", "DD2", "DD3", "DD4"], 1)
             createButton = st.form_submit_button("Create Response Spectrum")
+    
+    seismicVariables = SeismicInputs(latitude, longitude, soil, intensityLevel)
+    Data = SeismicTSC(Variables= seismicVariables)
 
     if createButton:
         # execute the function for tbec response spectrum
-        returnedSpectrumDict = tbecTargetSpectrum(latitude, longitude, soil, intensityLevel)
+        # returnedSpectrumDict = tbecTargetSpectrum(latitude, longitude, soil, intensityLevel)
+        
+
         # push data to the figures
         horizotanlResponseFig.add_trace(go.Scatter(
-            x = returnedSpectrumDict['T'],
-            y = returnedSpectrumDict['Sa']
+            # x = returnedSpectrumDict['T'],
+            # y = returnedSpectrumDict['Sa']
+            x = Data.ElasticHorizontalSpectrum['T'],
+            y = Data.ElasticHorizontalSpectrum['Sae']
         ))
 
-        maxHorizontalAcc = math.ceil(max(returnedSpectrumDict['Sa']))
+        maxHorizontalAcc = math.ceil(Data.ElasticHorizontalSpectrum['Sae'].max())
         horizotanlResponseFig.update_yaxes(
             range = [0, maxHorizontalAcc]
         )
 
         verticalResponseFig.add_trace(go.Scatter(
-            x = returnedSpectrumDict['T'],
-            y = returnedSpectrumDict['Sad']
+            x = Data.ElasticHorizontalSpectrum['T'],
+            y = Data.ElasticHorizontalSpectrum['Sde']
         ))
 
-        maxVerticalAcc = math.ceil(max(returnedSpectrumDict['Sad']))
+        maxVerticalAcc = math.ceil(Data.ElasticHorizontalSpectrum['Sde'].max())
         verticalResponseFig.update_yaxes(
             range = [0, maxVerticalAcc]
         )
-
-        # read returned spectral values
-        returnedValues = []
-        returnedValues.append(returnedSpectrumDict['Ss'])
-        returnedValues.append(returnedSpectrumDict['S1'])
-        returnedValues.append(returnedSpectrumDict['PGA'])
-        returnedValues.append(returnedSpectrumDict['PGV'])
-        returnedValues.append(returnedSpectrumDict['Fs'])
-        returnedValues.append(returnedSpectrumDict['F1'])
-        returnedValues.append(returnedSpectrumDict['SDs'])
-        returnedValues.append(returnedSpectrumDict['SD1'])
-        returnedValues.append(returnedSpectrumDict['TA'])
-        returnedValues.append(returnedSpectrumDict['TB'])
-        returnedValues.append(returnedSpectrumDict['TL'])
-        returnedValues.append(returnedSpectrumDict['DTS'])
-
-        spectralTable['Values'] = returnedValues
 
     # push figures to the layout
     with graphCol:
         # add download buttons
         try:
             horizontalSpectrum = pd.DataFrame()
-            horizontalSpectrum['T'] = returnedSpectrumDict['T']
-            horizontalSpectrum['Sa'] = returnedSpectrumDict['Sa']
+            horizontalSpectrum['T'] = Data.ElasticHorizontalSpectrum['T']
+            horizontalSpectrum['Sa'] = Data.ElasticHorizontalSpectrum['Sae']
 
             verticalSpectrum = pd.DataFrame()
-            verticalSpectrum['T'] = returnedSpectrumDict['T']
-            verticalSpectrum['Sad'] = returnedSpectrumDict['Sad']
+            verticalSpectrum['T'] = Data.ElasticHorizontalSpectrum['T']
+            verticalSpectrum['Sve'] = Data.ElasticHorizontalSpectrum['Sve']
 
             @st.cache_data
             def convert_df(df):
@@ -194,6 +177,7 @@ def load_view():
             st.plotly_chart(verticalResponseFig, use_container_width=True)
             st.download_button("Download Vertical Response Spectrum", 
                                     data=verticalCSV, file_name='verticalSpectrum.csv', mime='text/csv')
+        
         with tableTab:
             st.write('### Spectral Values')
             # inject CSS with markdown
@@ -203,4 +187,4 @@ def load_view():
                     tbody th {display:none}
                     </style>
                     """, unsafe_allow_html=True)
-            st.table(spectralTable)
+            st.table(Data.Variables.convert_dataframe())
