@@ -108,8 +108,8 @@ def load_view():
     with inputCol:
         st.write("##")
         with st.form('inputForm'):
-            latitude = st.number_input("Latitude", 34.25, 42.95, locationData[0], 0.5)
-            longitude = st.number_input("Longitude", 24.55, 45.95, locationData[1], 0.5)
+            latitude = st.number_input("Latitude", 34.25, 42.95, locationData[0], 0.5 , format="0:.6f")
+            longitude = st.number_input("Longitude", 24.55, 45.95, locationData[1], 0.5 , format="0:.6f")
             soil = st.selectbox("Soil Type", ('ZA', 'ZB', 'ZC', 'ZD', 'ZE'), 2)
             intensityLevel = st.selectbox("Intensity Level", ["DD1", "DD2", "DD3", "DD4"], 1)
             createButton = st.form_submit_button("Create Response Spectrum")
