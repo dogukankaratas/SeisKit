@@ -1,1 +1,1 @@
-# SeisKit-Streamlit-Archive
+# SeisKit Web App
